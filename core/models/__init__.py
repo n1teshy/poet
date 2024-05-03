@@ -15,10 +15,8 @@ class Generator(nn.Module):
         max_len,
         layers,
         heads,
-        src_pad_id,
     ):
         super().__init__()
-        self.pad_id = src_pad_id
         self.emb = TokenEmbedding(vocab_size, embedding_size, max_len)
         self.encoder = Encoder(embedding_size, layers, heads)
         self.linear = nn.Linear(embedding_size, vocab_size)
@@ -31,8 +29,7 @@ class Generator(nn.Module):
 
     def get_masks(self, x):
         seq_len = x.shape[1]
-        pad_mask = (x != self.tgt_pad_id).unsqueeze(1)
         lh_mask = torch.tril(
             torch.ones(seq_len, seq_len, dtype=torch.long, device=device)
         )
-        return pad_mask & lh_mask
+        return lh_mask
