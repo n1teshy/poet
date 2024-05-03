@@ -13,14 +13,14 @@ class Generator(nn.Module):
         vocab_size,
         embedding_size,
         max_len,
-        enc_layers,
-        enc_heads,
+        layers,
+        heads,
         src_pad_id,
     ):
         super().__init__()
         self.pad_id = src_pad_id
         self.emb = TokenEmbedding(vocab_size, embedding_size, max_len)
-        self.encoder = Encoder(embedding_size, enc_layers, enc_heads)
+        self.encoder = Encoder(embedding_size, layers, heads)
         self.linear = nn.Linear(embedding_size, vocab_size)
 
     def forward(self, x):
